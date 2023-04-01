@@ -60,4 +60,10 @@ import java.util.*
         return topicos
     }
 
+    fun buscarPorId(id:Long): Topico {
+        return topicos.stream().filter({
+                it->it.id == id
+        }).findFirst().get()
+    }
+
 }
