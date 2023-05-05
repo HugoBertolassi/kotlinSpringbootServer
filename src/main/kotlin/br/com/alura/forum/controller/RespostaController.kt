@@ -29,21 +29,21 @@ class RespostaController(private val serviceTopico:TopicoService) {
             id = 1,
             mensagem = "Reposta do topico 1",
             autor= usuario,
-            topico = serviceTopico.buscarPorId(1),
+            topico = serviceTopico.buscarPorIdTopico(1),
             solucao = true
         )
         val resposta2=Resposta(
             id = 2,
             mensagem = "Reposta 2 do topico 1",
             autor= usuario,
-            topico = serviceTopico.buscarPorId(1),
+            topico = serviceTopico.buscarPorIdTopico(1),
             solucao = true
         )
         val resposta3=Resposta(
             id = 3,
             mensagem = "Reposta 1 do topico 2",
             autor= usuario,
-            topico = serviceTopico.buscarPorId(2),
+            topico = serviceTopico.buscarPorIdTopico(2),
             solucao = true
         )
 
