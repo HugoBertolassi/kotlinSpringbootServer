@@ -1,14 +1,9 @@
 package br.com.alura.forum.controller
 
-import br.com.alura.forum.dto.TopicoDTO
+import br.com.alura.forum.dto.TopicoForm
 import br.com.alura.forum.dto.TopicoView
-import br.com.alura.forum.model.Curso
-import br.com.alura.forum.model.Resposta
-import br.com.alura.forum.model.Topico
-import br.com.alura.forum.model.Usuario
-import br.com.alura.forum.service.RespostaService
 import br.com.alura.forum.service.TopicoService
-import jakarta.websocket.server.PathParam
+import jakarta.validation.Valid
 import org.springframework.web.bind.annotation.*
 import java.util.*
 
@@ -25,7 +20,7 @@ class TopicoController(private val service:TopicoService) {
         return service.buscarPorId(id)
     }
     @PostMapping
-    fun cadastrar(@RequestBody dto:TopicoDTO) {
+    fun cadastrar(@RequestBody @Valid dto:TopicoForm) {
         service.cadastrar(dto)
     }
 }

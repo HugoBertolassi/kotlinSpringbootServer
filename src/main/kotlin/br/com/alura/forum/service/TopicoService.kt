@@ -1,8 +1,9 @@
 package br.com.alura.forum.service
 
 
-import br.com.alura.forum.dto.TopicoDTO
+import br.com.alura.forum.dto.TopicoForm
 import br.com.alura.forum.dto.TopicoView
+import br.com.alura.forum.mapper.TopicoViewMapper
 import br.com.alura.forum.model.Curso
 import br.com.alura.forum.model.Topico
 import br.com.alura.forum.model.Usuario
@@ -15,7 +16,8 @@ import kotlin.collections.ArrayList
  public class TopicoService(
         private var topicos:List<Topico> = ArrayList(),
         private val cursoService:CursoService,
-        private val autorService:AutorService
+        private val autorService:AutorService,
+         private val topicoViewMapper: TopicoViewMapper
  ) {
     init{
         val topico = Topico(
@@ -65,7 +67,7 @@ import kotlin.collections.ArrayList
         )
 
 
-        var dto=TopicoDTO(
+        var dto=TopicoForm(
                 titulo = "alo",
                 mensagem = "oi",
                 idCurso = 1,
@@ -77,6 +79,7 @@ import kotlin.collections.ArrayList
         topicos = topicos.plus(topico3)
         cadastrar(dto)
     }
+   /*Funcao listar sem adocao do mapper, por nao ter o mapper fica tendo que repetir a construcao do objeto
     fun listar(): List<TopicoView>{
         return topicos.stream().map{
             t->TopicoView(
@@ -87,7 +90,13 @@ import kotlin.collections.ArrayList
                     DataCriacao = t.dataCriacao
             )}.collect(Collectors.toList())//converte stream em uma lista
     }
+    */
 
+    fun listar(): List<TopicoView>{
+        return topicos.stream().map{//coverte topico em topico view
+            t->topicoViewMapper.map(t)
+        }.collect(Collectors.toList())//converte stream em uma lista
+    }
     fun buscarPorId(id:Long): TopicoView {
         val t=topicos.stream().filter({
             it->it.id == id
@@ -106,7 +115,7 @@ import kotlin.collections.ArrayList
             it->it.id == id
         }).findFirst().get()
     }
-    fun cadastrar(dto: TopicoDTO){
+    fun cadastrar(dto: TopicoForm){
         println(dto)
         topicos=topicos.plus(Topico(
                 id = topicos.size.toLong() + 1,
