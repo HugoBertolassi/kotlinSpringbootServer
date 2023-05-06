@@ -1,15 +1,22 @@
 package br.com.alura.forum.service
 
-import br.com.alura.forum.model.Curso
-import br.com.alura.forum.model.Resposta
-import br.com.alura.forum.model.Topico
-import br.com.alura.forum.model.Usuario
+import br.com.alura.forum.dto.RespostaForm
+import br.com.alura.forum.dto.TopicoForm
+import br.com.alura.forum.dto.TopicoView
+import br.com.alura.forum.mapper.RespostaFormMapper
+import br.com.alura.forum.model.*
 import org.springframework.stereotype.Service
+import java.time.LocalDateTime
 import java.util.*
 import java.util.stream.Collectors
 
 @Service
-class RespostaService(private var respostas: List<Resposta>) {
+class RespostaService(
+        private var respostas: List<Resposta> = ArrayList(),
+        private val autorService: AutorService,
+        private val topicoService: TopicoService,
+        private val respostaFormMapper:RespostaFormMapper
+        ) {
 
     init {
         val curso = Curso(
@@ -22,15 +29,16 @@ class RespostaService(private var respostas: List<Resposta>) {
             nome = "Ana da Silva",
             email = "ana@email.com"
         )
-        val topico = Topico(
+        val topico = TopicoView(
             id = 1,
             titulo = "Duvida Kotlin",
             mensagem = "Variaveis no Kotlin",
-            curso = curso,
-            autor = autor
+            status = StatusTopico.SOLUCIONADO,
+                DataCriacao = LocalDateTime.now()
+
         )
 
-        val resposta = Resposta(
+        val resposta1 = Resposta(
             id = 1,
             mensagem = "Resposta 1",
             autor = autor,
@@ -46,7 +54,7 @@ class RespostaService(private var respostas: List<Resposta>) {
             solucao = false
         )
 
-        respostas = Arrays.asList(resposta, resposta2)
+        respostas = Arrays.asList(resposta1, resposta2)
     }
 
     fun listar(idTopico: Long): List<Resposta> {
@@ -54,4 +62,17 @@ class RespostaService(private var respostas: List<Resposta>) {
             r.topico.id == idTopico
         }.collect(Collectors.toList())
     }
+
+    fun listarPorTopico(idTopico: Long): List<Resposta> {
+        return respostas.stream().filter { r ->
+            r.topico.id == idTopico
+        }.collect(Collectors.toList())
+    }
+
+    fun cadastrar(respostaForm: RespostaForm){
+        val resposta = respostaFormMapper.map(respostaForm)
+        resposta.id = respostas.size.toLong() + 1
+        respostas=respostas.plus(resposta)
+    }
+
 }

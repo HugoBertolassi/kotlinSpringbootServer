@@ -3,6 +3,7 @@ package br.com.alura.forum.service
 
 import br.com.alura.forum.dto.TopicoForm
 import br.com.alura.forum.dto.TopicoView
+import br.com.alura.forum.mapper.TopicoFormMapper
 import br.com.alura.forum.mapper.TopicoViewMapper
 import br.com.alura.forum.model.Curso
 import br.com.alura.forum.model.Topico
@@ -17,7 +18,8 @@ import kotlin.collections.ArrayList
         private var topicos:List<Topico> = ArrayList(),
         private val cursoService:CursoService,
         private val autorService:AutorService,
-         private val topicoViewMapper: TopicoViewMapper
+         private val topicoViewMapper:TopicoViewMapper,
+         private val topicoFormMapper: TopicoFormMapper
  ) {
     init{
         val topico = Topico(
@@ -116,7 +118,14 @@ import kotlin.collections.ArrayList
         }).findFirst().get()
     }
     fun cadastrar(dto: TopicoForm){
-        println(dto)
+        val topico =topicoFormMapper.map(dto)
+        topico.id =topicos.size.toLong() + 1
+        topicos=topicos.plus(topico)
+    }
+
+    /*ex1 da função cadastrar
+    fun cadastrar(dto: TopicoForm){
+        //println(dto)
         topicos=topicos.plus(Topico(
                 id = topicos.size.toLong() + 1,
                 titulo=dto.titulo,
@@ -124,6 +133,5 @@ import kotlin.collections.ArrayList
                 curso = cursoService.buscarPorId(dto.idCurso),
                 autor = autorService.buscarPorId(dto.idAutor)
         ))
-    }
-
+    }*/
 }

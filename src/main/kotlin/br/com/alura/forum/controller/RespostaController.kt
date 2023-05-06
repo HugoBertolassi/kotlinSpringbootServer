@@ -1,12 +1,16 @@
 package br.com.alura.forum.controller
 
+import br.com.alura.forum.dto.RespostaForm
 import br.com.alura.forum.model.Resposta
 import br.com.alura.forum.model.Usuario
 import br.com.alura.forum.service.RespostaService
 import br.com.alura.forum.service.TopicoService
 import com.fasterxml.jackson.annotation.JsonTypeInfo.Id
+import jakarta.validation.Valid
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import java.util.Arrays
@@ -29,21 +33,21 @@ class RespostaController(private val serviceTopico:TopicoService) {
             id = 1,
             mensagem = "Reposta do topico 1",
             autor= usuario,
-            topico = serviceTopico.buscarPorIdTopico(1),
+            topico = serviceTopico.buscarPorId(1),
             solucao = true
         )
         val resposta2=Resposta(
             id = 2,
             mensagem = "Reposta 2 do topico 1",
             autor= usuario,
-            topico = serviceTopico.buscarPorIdTopico(1),
+            topico = serviceTopico.buscarPorId(1),
             solucao = true
         )
         val resposta3=Resposta(
             id = 3,
             mensagem = "Reposta 1 do topico 2",
             autor= usuario,
-            topico = serviceTopico.buscarPorIdTopico(2),
+            topico = serviceTopico.buscarPorId(2),
             solucao = true
         )
 
@@ -57,12 +61,21 @@ class RespostaController(private val serviceTopico:TopicoService) {
 }
 
 @RestController
-@RequestMapping("/topicos/{id}/respostas")
-class RespostasController(private val service: RespostaService) {
+@RequestMapping("/topicos")
+class RespostasController(
+        private val service: RespostaService
+) {
 
-    @GetMapping
+    @GetMapping("/{id}/respostas")
     fun listar(@PathVariable id: Long): List<Resposta> {
         return service.listar(id)
+    }
+
+    @PostMapping("/{idTopico}/respostas")
+    fun cadastrar(@RequestBody @Valid form: RespostaForm,
+                  @PathVariable idTopico: Long){
+
+        service.cadastrar(form)
     }
 
 }
