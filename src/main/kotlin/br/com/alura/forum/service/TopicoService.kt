@@ -4,6 +4,7 @@ package br.com.alura.forum.service
 import br.com.alura.forum.dto.AtualizacaoTopicoForm
 import br.com.alura.forum.dto.TopicoForm
 import br.com.alura.forum.dto.TopicoView
+import br.com.alura.forum.exception.NotFoundException
 import br.com.alura.forum.mapper.TopicoFormMapper
 import br.com.alura.forum.mapper.TopicoViewMapper
 import br.com.alura.forum.model.Curso
@@ -20,7 +21,8 @@ import kotlin.collections.ArrayList
         private val cursoService:CursoService,
         private val autorService:AutorService,
          private val topicoViewMapper:TopicoViewMapper,
-         private val topicoFormMapper: TopicoFormMapper
+         private val topicoFormMapper: TopicoFormMapper,
+         private val notFoundMessage:String="Topico não encontrado"
  ) {
     init{
         val topico = Topico(
@@ -103,7 +105,7 @@ import kotlin.collections.ArrayList
     fun buscarPorId(id:Long): TopicoView {
         val t=topicos.stream().filter({
             it->it.id == id
-        }).findFirst().get()
+        }).findFirst().orElseThrow{NotFoundException(notFoundMessage)} //o or else subbstituiu o get
         return TopicoView(
                 id=t.id,
                 mensagem = t.mensagem,
@@ -118,17 +120,18 @@ import kotlin.collections.ArrayList
             it->it.id == id
         }).findFirst().get()
     }
-    fun cadastrar(dto: TopicoForm){
+    fun cadastrar(dto: TopicoForm):TopicoView{
         val topico =topicoFormMapper.map(dto)
         topico.id =topicos.size.toLong() + 1
         topicos=topicos.plus(topico)
+        return topicoViewMapper.map(topico)
     }
 
-    fun atualizar(form: AtualizacaoTopicoForm) {
+    fun atualizar(form: AtualizacaoTopicoForm) :TopicoView{
         val topico=topicos.stream().filter({
             it->it.id == form.id
-        }).findFirst().get()
-        topicos=topicos.minus(topico).plus(Topico(
+        }).findFirst().orElseThrow{NotFoundException(notFoundMessage)} //o or else subbstituiu o get
+        val topicoAtualizado=Topico(
                 id= form.id,
                 titulo = form.titulo,
                 mensagem=form.mensagem,
@@ -137,14 +140,15 @@ import kotlin.collections.ArrayList
                 respostas = topico.respostas,
                 status=topico.status,
                 dataCriacao = topico.dataCriacao
-
-        ))
+        )
+        topicos=topicos.minus(topico).plus(topicoAtualizado)
+        return topicoViewMapper.map(topicoAtualizado)
     }
 
     fun excluirPorId(id: Long) {
         val topico=topicos.stream().filter({
             it->it.id == id
-        }).findFirst().get()
+        }).findFirst().orElseThrow{NotFoundException(notFoundMessage)}
         topicos=topicos.minus(topico)
     }
 
