@@ -10,7 +10,9 @@ import br.com.alura.forum.mapper.TopicoViewMapper
 import br.com.alura.forum.model.Curso
 import br.com.alura.forum.model.Topico
 import br.com.alura.forum.model.Usuario
+import br.com.alura.forum.repository.TopicoRepository
 import org.springframework.stereotype.Service
+import java.time.LocalDateTime
 import java.util.*
 import java.util.stream.Collectors
 import kotlin.collections.ArrayList
@@ -18,13 +20,12 @@ import kotlin.collections.ArrayList
 @Service
  public class TopicoService(
         private var topicos:List<Topico> = ArrayList(),
-        private val cursoService:CursoService,
-        private val autorService:AutorService,
-         private val topicoViewMapper:TopicoViewMapper,
-         private val topicoFormMapper: TopicoFormMapper,
-         private val notFoundMessage:String="Topico não encontrado"
+        private val repository:TopicoRepository,
+        private val topicoViewMapper:TopicoViewMapper,
+        private val topicoFormMapper: TopicoFormMapper,
+        private val notFoundMessage:String="Topico não encontrado"
  ) {
-    init{
+    /*init{
         val topico = Topico(
                 id = 1,
                 titulo = "duvida de Kotlin",
@@ -83,7 +84,7 @@ import kotlin.collections.ArrayList
         topicos = Arrays.asList(topico,topico2)
         topicos = topicos.plus(topico3)
         cadastrar(dto)
-    }
+    }*/
    /*Funcao listar sem adocao do mapper, por nao ter o mapper fica tendo que repetir a construcao do objeto
     fun listar(): List<TopicoView>{
         return topicos.stream().map{
@@ -98,11 +99,30 @@ import kotlin.collections.ArrayList
     */
 
     fun listar(): List<TopicoView>{
+        return repository.findAll().stream().map{//coverte topico em topico view
+            t->topicoViewMapper.map(t)
+        }.collect(Collectors.toList())
+    }
+    fun listarMemoria(): List<TopicoView>{
         return topicos.stream().map{//coverte topico em topico view
             t->topicoViewMapper.map(t)
         }.collect(Collectors.toList())//converte stream em uma lista
     }
     fun buscarPorId(id:Long): TopicoView {
+        val t=repository.findById(id).orElseThrow{NotFoundException(notFoundMessage)} //o or else subbstituiu o get
+        return TopicoView(
+                id=t.id,
+                mensagem = t.mensagem,
+                titulo =  t.titulo,
+                status = t.status,
+                DataCriacao = t.dataCriacao
+        )
+    }
+    fun buscarPorIdInterno(id:Long): Topico {
+        val t=repository.findById(id).orElseThrow{NotFoundException(notFoundMessage)} //o or else subbstituiu o get
+        return t
+    }
+    fun buscarPorIdMemoria(id:Long): TopicoView {
         val t=topicos.stream().filter({
             it->it.id == id
         }).findFirst().orElseThrow{NotFoundException(notFoundMessage)} //o or else subbstituiu o get
@@ -120,7 +140,13 @@ import kotlin.collections.ArrayList
             it->it.id == id
         }).findFirst().get()
     }
+
     fun cadastrar(dto: TopicoForm):TopicoView{
+        val topico =topicoFormMapper.map(dto)
+        repository.save(topico)
+        return topicoViewMapper.map(topico)
+    }
+    fun cadastrarMemoria(dto: TopicoForm):TopicoView{
         val topico =topicoFormMapper.map(dto)
         topico.id =topicos.size.toLong() + 1
         topicos=topicos.plus(topico)
@@ -128,6 +154,20 @@ import kotlin.collections.ArrayList
     }
 
     fun atualizar(form: AtualizacaoTopicoForm) :TopicoView{
+        val topico=repository.findById(form.id)
+                .orElseThrow{NotFoundException(notFoundMessage)} //o or else subbstituiu o get
+            topico.titulo=form.titulo
+            topico.mensagem=form.mensagem
+            topico.dataUltimaAlteracao=LocalDateTime.now()
+
+        
+        return topicoViewMapper.map(topico)
+    }
+
+    fun excluirPorId(id: Long) {
+        repository.deleteById(id)
+    }
+    fun atualizarMemoria(form: AtualizacaoTopicoForm) :TopicoView{
         val topico=topicos.stream().filter({
             it->it.id == form.id
         }).findFirst().orElseThrow{NotFoundException(notFoundMessage)} //o or else subbstituiu o get
@@ -145,7 +185,7 @@ import kotlin.collections.ArrayList
         return topicoViewMapper.map(topicoAtualizado)
     }
 
-    fun excluirPorId(id: Long) {
+    fun excluirPorIdMemoria(id: Long) {
         val topico=topicos.stream().filter({
             it->it.id == id
         }).findFirst().orElseThrow{NotFoundException(notFoundMessage)}

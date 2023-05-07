@@ -4,6 +4,7 @@ import br.com.alura.forum.dto.AtualizacaoTopicoForm
 import br.com.alura.forum.dto.TopicoForm
 import br.com.alura.forum.dto.TopicoView
 import br.com.alura.forum.service.TopicoService
+import jakarta.transaction.Transactional
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -24,6 +25,7 @@ class TopicoController(private val service:TopicoService) {
         return service.buscarPorId(id)
     }
     @PostMapping
+    @Transactional //é necessa´rio colocar nos metodos de escrita
     fun cadastrar(@RequestBody @Valid dto:TopicoForm,
                   uriBuilder:UriComponentsBuilder
                   ):ResponseEntity<TopicoView> {
@@ -33,6 +35,7 @@ class TopicoController(private val service:TopicoService) {
     }
 
     @PutMapping
+    @Transactional
     fun atualizar(
             @RequestBody @Valid form: AtualizacaoTopicoForm,
                   ) :ResponseEntity<TopicoView>{
@@ -42,6 +45,7 @@ class TopicoController(private val service:TopicoService) {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @Transactional
     fun excluir(@PathVariable id:Long){
         service.excluirPorId(id)
     }
