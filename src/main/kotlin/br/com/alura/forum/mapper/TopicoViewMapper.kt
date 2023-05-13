@@ -12,7 +12,7 @@ class TopicoViewMapper :MapperInterface<Topico, TopicoView>{
         mensagem = t.mensagem,
         titulo =  t.titulo,
         status = t.status,
-        DataCriacao = t.dataCriacao
+        dataCriacao = t.dataCriacao
        )
     }
 }

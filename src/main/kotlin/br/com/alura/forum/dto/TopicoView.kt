@@ -9,6 +9,6 @@ data class TopicoView (
         val titulo:String,
         val mensagem:String,
         val status:StatusTopico,
-        val DataCriacao:LocalDateTime
+        val dataCriacao:LocalDateTime
 
 )

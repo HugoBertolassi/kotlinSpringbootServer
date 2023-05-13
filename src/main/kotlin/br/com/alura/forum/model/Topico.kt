@@ -14,19 +14,19 @@ import java.time.LocalDateTime
 @Entity
 data class Topico (
         @Id @GeneratedValue(strategy = GenerationType.IDENTITY)//é colocado pq o código que vi criar
-        var id:Long?=null,
+        var id:Long? = null,
         var titulo:String,
         var mensagem:String,
         val dataCriacao:LocalDateTime = LocalDateTime.now(),
         var dataUltimaAlteracao:LocalDateTime = LocalDateTime.now(),
         @ManyToOne//adição da cardinalidade do banco
-        val curso:Curso,
+        var curso:Curso,
         @ManyToOne
-        val autor:Usuario,
+        var autor:Usuario,
         @Enumerated(value= EnumType.STRING)
-        val status:StatusTopico = StatusTopico.NAO_RESPONDIDO,
+        var status:StatusTopico = StatusTopico.NAO_RESPONDIDO,
         @OneToMany(mappedBy = "topico")//di que é outro atributo que controla
-        val respostas: List<Resposta> = ArrayList()
+        var respostas: List<Resposta> = ArrayList()
 
 )
 

@@ -17,8 +17,9 @@ import java.util.*
 class TopicoController(private val service:TopicoService) {
 
     @GetMapping
-    fun listar():List<TopicoView>{
-        return service.listar()
+    fun listar(@RequestParam(required = false) nomeCurso:String?):List<TopicoView>{
+
+        return service.listar(nomeCurso)
     }
     @GetMapping("/{id}")
     fun buscarPorId(@PathVariable id:Long):TopicoView{

@@ -98,8 +98,13 @@ import kotlin.collections.ArrayList
     }
     */
 
-    fun listar(): List<TopicoView>{
-        return repository.findAll().stream().map{//coverte topico em topico view
+    fun listar(nomeCurso:String?): List<TopicoView>{
+        val topicos = if (nomeCurso == null){
+            repository.findAll()
+        } else {
+           repository.findByCursoNome(nomeCurso)
+        }
+        return topicos.stream().map{//coverte topico em topico view
             t->topicoViewMapper.map(t)
         }.collect(Collectors.toList())
     }
@@ -115,7 +120,7 @@ import kotlin.collections.ArrayList
                 mensagem = t.mensagem,
                 titulo =  t.titulo,
                 status = t.status,
-                DataCriacao = t.dataCriacao
+                dataCriacao = t.dataCriacao
         )
     }
     fun buscarPorIdInterno(id:Long): Topico {
@@ -131,7 +136,7 @@ import kotlin.collections.ArrayList
                 mensagem = t.mensagem,
                 titulo =  t.titulo,
                 status = t.status,
-                DataCriacao = t.dataCriacao
+                dataCriacao = t.dataCriacao
         )
     }
 

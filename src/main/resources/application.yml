@@ -4,15 +4,20 @@ spring:
     driverClassName: org.h2.Driver
     url: jdbc:h2:mem:forum
     username: sa
-    password: <blank>
+    password:
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
     properties:
       hibernate:
         show-sql: true
         format-sql: true
-        ddl-auto: update
-    defer-datasource-initialization: true
+        ddl-auto: create
+    defer-datasource-initialization: false
   logging:
     level:
+      org:
+        hibernate:
+          SQL: DEBUG
+          type.descriptor.sql.BasicBinder: TRACE
       root: DEBUG
+  flyway.locations: db
