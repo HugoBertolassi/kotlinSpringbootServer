@@ -21,3 +21,6 @@ spring:
           type.descriptor.sql.BasicBinder: TRACE
       root: DEBUG
   flyway.locations: db
+  h2:
+    console:
+      enabled: true

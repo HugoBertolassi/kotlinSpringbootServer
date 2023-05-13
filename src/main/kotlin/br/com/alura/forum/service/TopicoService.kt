@@ -3,6 +3,7 @@ package br.com.alura.forum.service
 
 import br.com.alura.forum.dto.AtualizacaoTopicoForm
 import br.com.alura.forum.dto.TopicoForm
+import br.com.alura.forum.dto.TopicoPorCategoriaDto
 import br.com.alura.forum.dto.TopicoView
 import br.com.alura.forum.exception.NotFoundException
 import br.com.alura.forum.mapper.TopicoFormMapper
@@ -203,6 +204,10 @@ import kotlin.collections.ArrayList
             it->it.id == id
         }).findFirst().orElseThrow{NotFoundException(notFoundMessage)}
         topicos=topicos.minus(topico)
+    }
+
+    fun relatorio() :List<TopicoPorCategoriaDto>{
+       return repository.relatorio()
     }
 
     /*ex1 da função cadastrar
