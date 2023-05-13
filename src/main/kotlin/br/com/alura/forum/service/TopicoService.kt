@@ -11,6 +11,8 @@ import br.com.alura.forum.model.Curso
 import br.com.alura.forum.model.Topico
 import br.com.alura.forum.model.Usuario
 import br.com.alura.forum.repository.TopicoRepository
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
 import java.util.*
@@ -98,16 +100,22 @@ import kotlin.collections.ArrayList
     }
     */
 
-    fun listar(nomeCurso:String?): List<TopicoView>{
+    fun listar(
+            nomeCurso:String?,
+            paginacao:Pageable
+               //): List<TopicoView>{//mudou para Page para ser compativel
+        ): Page<TopicoView> {
         val topicos = if (nomeCurso == null){
-            repository.findAll()
+            repository.findAll(paginacao)
         } else {
-           repository.findByCursoNome(nomeCurso)
+           repository.findByCursoNome(nomeCurso,paginacao)
         }
-        return topicos.stream().map{//coverte topico em topico view
+        //return topicos.stream().map{//coverte topico em topico view, reovid stream pq nao tem no page
+        return topicos.map{
             t->topicoViewMapper.map(t)
-        }.collect(Collectors.toList())
+        }
     }
+
     fun listarMemoria(): List<TopicoView>{
         return topicos.stream().map{//coverte topico em topico view
             t->topicoViewMapper.map(t)
