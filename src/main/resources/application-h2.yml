@@ -12,7 +12,6 @@ spring:
     database-platform: org.hibernate.dialect.H2Dialect
     properties:
       hibernate:
-
         ddl-auto: create
     defer-datasource-initialization: false
   logging.level:
