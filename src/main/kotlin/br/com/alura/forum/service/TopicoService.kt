@@ -8,15 +8,12 @@ import br.com.alura.forum.dto.TopicoView
 import br.com.alura.forum.exception.NotFoundException
 import br.com.alura.forum.mapper.TopicoFormMapper
 import br.com.alura.forum.mapper.TopicoViewMapper
-import br.com.alura.forum.model.Curso
 import br.com.alura.forum.model.Topico
-import br.com.alura.forum.model.Usuario
 import br.com.alura.forum.repository.TopicoRepository
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
-import java.util.*
 import java.util.stream.Collectors
 import kotlin.collections.ArrayList
 
@@ -103,13 +100,13 @@ import kotlin.collections.ArrayList
 
     fun listar(
             nomeCurso:String?,
-            paginacao:Pageable
+            paginacao: Pageable
                //): List<TopicoView>{//mudou para Page para ser compativel
         ): Page<TopicoView> {
         val topicos = if (nomeCurso == null){
             repository.findAll(paginacao)
         } else {
-           repository.findByCursoNome(nomeCurso,paginacao)
+           repository.findByCursoNome(nomeCurso, paginacao)
         }
         //return topicos.stream().map{//coverte topico em topico view, reovid stream pq nao tem no page
         return topicos.map{
