@@ -27,7 +27,7 @@ class TopicoServiceTest {
     val paginacao: Pageable = mockk()
 
 
-    //ambiene de teste
+    //ambiene de teste// o every captura a chamada  e mocka valores para cada chamada da funçaõ
     val topicos:List<Topico> = ArrayList()
     val topicoRepository: TopicoRepository = mockk{
         every { findByCursoNome(any(),any())} returns topico
