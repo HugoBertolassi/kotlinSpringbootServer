@@ -48,6 +48,10 @@ verificar se tem container: docker ps
 habilitar edicao do sql pelo prompt: docker exec -it mysql-container bash
 concetar o cmd: mysql -u root -p
 criar banco de dados: create database forum
+vericar bds : SHOW DATABASES
+Abrir o banco: USE NOMEBANCO
+
+iniciar container ja cadastrado: docker start -ai mysql-container
 
 ### Reference Documentation
 For further reference, please consider the following sections:
