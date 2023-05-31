@@ -18,7 +18,7 @@ data class Topico (
         var titulo:String,
         var mensagem:String,
         val dataCriacao:LocalDateTime = LocalDateTime.now(),
-        var dataUltimaAlteracao:LocalDateTime = LocalDateTime.now(),
+        var dataUltimaAlteracao:LocalDateTime? = LocalDateTime.now(),
         @ManyToOne//adição da cardinalidade do banco
         var curso:Curso,
         @ManyToOne

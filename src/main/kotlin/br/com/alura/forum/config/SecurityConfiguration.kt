@@ -34,7 +34,7 @@ class SecurityConfiguration(
                 .csrf().disable()///remoção do controle de csrf, Verificar como adicionar essa etapa, sem ela bloqueava o post
                 .authorizeHttpRequests().
                 //antMatchers was deprecated. HOw solve https://docs.spring.io/spring-security/reference/5.8/migration/servlet/config.html
-                requestMatchers("/topicos").hasAuthority("LEITURA_ESCRITA").
+                requestMatchers("/topicos/**").hasAuthority("LEITURA_ESCRITA").
                 requestMatchers(HttpMethod.POST,"/login").permitAll().
                 requestMatchers("/h2-console").permitAll().
                 anyRequest().
