@@ -18,6 +18,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher
 import org.springframework.web.filter.OncePerRequestFilter
 
 @Configuration
@@ -34,9 +35,11 @@ class SecurityConfiguration(
                 .csrf().disable()///remoção do controle de csrf, Verificar como adicionar essa etapa, sem ela bloqueava o post
                 .authorizeHttpRequests().
                 //antMatchers was deprecated. HOw solve https://docs.spring.io/spring-security/reference/5.8/migration/servlet/config.html
-                requestMatchers("/topicos/**").hasAuthority("LEITURA_ESCRITA").
                 requestMatchers(HttpMethod.POST,"/login").permitAll().
                 requestMatchers("/h2-console").permitAll().
+                requestMatchers("/swagger-ui/**").permitAll().
+                requestMatchers(HttpMethod.GET,"/v3/api-docs/**").permitAll().
+                requestMatchers("/topicos/**").hasAuthority("LEITURA_ESCRITA").
                 anyRequest().
                 authenticated().
                 and()

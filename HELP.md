@@ -53,6 +53,11 @@ Abrir o banco: USE NOMEBANCO
 
 iniciar container ja cadastrado: docker start -ai mysql-container
 
+# Api do Swagger
+https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-ui/1.7.0
+
+Site que abre :http://localhost:8080/swagger-ui/index.html
+
 ### Reference Documentation
 For further reference, please consider the following sections:
 

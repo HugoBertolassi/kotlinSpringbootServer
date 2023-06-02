@@ -5,6 +5,7 @@ import br.com.alura.forum.dto.TopicoForm
 import br.com.alura.forum.dto.TopicoPorCategoriaDto
 import br.com.alura.forum.dto.TopicoView
 import br.com.alura.forum.service.TopicoService
+import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import jakarta.transaction.Transactional
 import jakarta.validation.Valid
 import org.springframework.cache.annotation.CacheEvict
@@ -20,11 +21,13 @@ import org.springframework.web.util.UriComponentsBuilder
 import java.util.*
 
 @RestController
+@SecurityRequirement(name= "bearerAuth")
 @RequestMapping("/topicos")
 class TopicoController(private val service:TopicoService) {
 
     @GetMapping
     @Cacheable("topicos")//topico é um nome para oo cache
+
     fun listar(
             @RequestParam(required = false) nomeCurso:String?,
             @PageableDefault(size = 5, sort = ["dataCriacao"], direction = Sort.Direction.DESC ) paginacao:Pageable
