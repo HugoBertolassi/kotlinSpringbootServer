@@ -26,8 +26,6 @@ import java.util.*
 class TopicoController(private val service:TopicoService) {
 
     @GetMapping
-    @Cacheable("topicos")//topico é um nome para oo cache
-
     fun listar(
             @RequestParam(required = false) nomeCurso:String?,
             @PageableDefault(size = 5, sort = ["dataCriacao"], direction = Sort.Direction.DESC ) paginacao:Pageable
@@ -41,8 +39,7 @@ class TopicoController(private val service:TopicoService) {
     }
     @PostMapping
     @Transactional //é necessa´rio colocar nos metodos de escrita
-    @CacheEvict(value=["topicos"], allEntries = true)//limpa o cach de topicos
-    fun cadastrar(@RequestBody @Valid dto:TopicoForm,
+     fun cadastrar(@RequestBody @Valid dto:TopicoForm,
                   uriBuilder:UriComponentsBuilder
                   ):ResponseEntity<TopicoView> {
         val topicoview=service.cadastrar(dto)
@@ -52,7 +49,7 @@ class TopicoController(private val service:TopicoService) {
 
     @PutMapping
     @Transactional
-    @CacheEvict(value=["topicos"], allEntries = true)//limpa o cach de topicos
+    //@CacheEvict(value=["topicos"], allEntries = true)//limpa o cach de topicos
     fun atualizar(
             @RequestBody @Valid form: AtualizacaoTopicoForm,
                   ) :ResponseEntity<TopicoView>{

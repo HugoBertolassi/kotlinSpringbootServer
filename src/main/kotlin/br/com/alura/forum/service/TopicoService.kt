@@ -10,6 +10,8 @@ import br.com.alura.forum.mapper.TopicoFormMapper
 import br.com.alura.forum.mapper.TopicoViewMapper
 import br.com.alura.forum.model.Topico
 import br.com.alura.forum.repository.TopicoRepository
+import org.springframework.cache.annotation.CacheEvict
+import org.springframework.cache.annotation.Cacheable
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
@@ -97,7 +99,7 @@ import kotlin.collections.ArrayList
             )}.collect(Collectors.toList())//converte stream em uma lista
     }
     */
-
+    @Cacheable(cacheNames =["topicos"], key ="#root.method.name")//topico é um nome para oo cache
     fun listar(
             nomeCurso:String?,
             paginacao: Pageable
@@ -164,6 +166,7 @@ import kotlin.collections.ArrayList
         return topicoViewMapper.map(topico)
     }
 
+    @CacheEvict(value=["topicos"], allEntries = true)//limpa o cach de topicos
     fun atualizar(form: AtualizacaoTopicoForm) :TopicoView{
         val topico=repository.findById(form.id)
                 .orElseThrow{NotFoundException(notFoundMessage)} //o or else subbstituiu o get
@@ -175,6 +178,7 @@ import kotlin.collections.ArrayList
         return topicoViewMapper.map(topico)
     }
 
+    @CacheEvict(value=["topicos"], allEntries = true)//limpa o cach de topicos
     fun excluirPorId(id: Long) {
         repository.deleteById(id)
     }

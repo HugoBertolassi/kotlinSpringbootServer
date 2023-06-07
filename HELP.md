@@ -58,6 +58,16 @@ https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-ui/1.7.0
 
 Site que abre :http://localhost:8080/swagger-ui/index.html
 
+
+# nstalar container redis
+abrir docker hb ebaixar
+docker pull redis:latest
+rodar o container: docker run -p 6379:6379 --name redis redis:latest
+
+Acompanhar o que ocorre com oredis:
+docker exec -it redis bash
+redis-cli  monitor
+
 ### Reference Documentation
 For further reference, please consider the following sections:
 

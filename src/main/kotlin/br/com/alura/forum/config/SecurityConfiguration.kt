@@ -39,7 +39,7 @@ class SecurityConfiguration(
                 requestMatchers("/h2-console").permitAll().
                 requestMatchers("/swagger-ui/**").permitAll().
                 requestMatchers(HttpMethod.GET,"/v3/api-docs/**").permitAll().
-                requestMatchers("/topicos/**").hasAuthority("LEITURA_ESCRITA").
+                requestMatchers("/topicos","/topicos/**").hasAuthority("LEITURA_ESCRITA").
                 anyRequest().
                 authenticated().
                 and()

@@ -2,6 +2,7 @@ package br.com.alura.forum.dto
 
 import br.com.alura.forum.model.StatusTopico
 import org.springframework.format.annotation.DateTimeFormat
+import java.io.Serializable
 import java.time.LocalDateTime
 
 data class TopicoView (
@@ -11,4 +12,4 @@ data class TopicoView (
         val status:StatusTopico,
         val dataCriacao:LocalDateTime
 
-)
+): Serializable
