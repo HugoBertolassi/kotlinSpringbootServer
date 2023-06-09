@@ -11,6 +11,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 import org.springframework.data.domain.PageRequest
 import org.springframework.test.context.DynamicPropertyRegistry
 import org.springframework.test.context.DynamicPropertySource
+import org.testcontainers.containers.GenericContainer
 import org.testcontainers.containers.MySQLContainer
 import org.testcontainers.junit.jupiter.Container
 import org.testcontainers.junit.jupiter.Testcontainers
@@ -33,6 +34,10 @@ class TopicoRepositoryTest {
             withUsername("joao")
             withPassword("12345")
         }
+        @Container
+        private val redisContainer = GenericContainer<Nothing>("redis:latest").apply{
+            withExposedPorts(6379)
+        }
 
         @JvmStatic
         @DynamicPropertySource
@@ -40,6 +45,9 @@ class TopicoRepositoryTest {
             registry.add("spring.datasource.url", mysqlContainer::getJdbcUrl);
             registry.add("spring.datasource.password", mysqlContainer::getPassword);
             registry.add("spring.datasource.username", mysqlContainer::getUsername);
+
+            registry.add("spring.redis.host", redisContainer::  getContainerIpAddress)
+            registry.add("spring.redis.port", redisContainer::  getFirstMappedPort)
         }
     }
 
