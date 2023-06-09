@@ -17,7 +17,8 @@ class RespostaService(
         //private val topicoService: TopicoService,
         private val respostaFormMapper:RespostaFormMapper,
         private val respostaRepository: RespostaRepository,
-        private val respostaViewMapper: RespostaViewMapper
+        private val respostaViewMapper: RespostaViewMapper,
+        private val emailService:EmailService
         ) {
 /*
     init {
@@ -88,6 +89,9 @@ class RespostaService(
 
         val resposta = respostaFormMapper.map(respostaForm)
         respostaRepository.save(resposta)
+
+        val autorEmail=resposta.topico.autor.email
+        emailService.notificar(autorEmail)
     }
 
 }
