@@ -1,8 +1,10 @@
 package br.com.alura.forum.controller
 
 import br.com.alura.forum.dto.RespostaForm
+import br.com.alura.forum.dto.RespostaView
 import br.com.alura.forum.model.Resposta
 import br.com.alura.forum.service.RespostaService
+import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import jakarta.transaction.Transactional
 import jakarta.validation.Valid
 import org.springframework.web.bind.annotation.GetMapping
@@ -61,13 +63,14 @@ class RespostaController(
 } */
 
 @RestController
-@RequestMapping("/topicos")
+@SecurityRequirement(name= "bearerAuth")
+@RequestMapping("/respostas")
 class RespostaController1(
         private val service: RespostaService
     ) {
 
     @GetMapping("/{id}/respostas")
-    fun listar(@PathVariable id: Long): List<Resposta> {
+    fun listar(@PathVariable id: Long): List<RespostaView> {
         return service.listar(id)
     }
 
@@ -77,6 +80,12 @@ class RespostaController1(
                   @PathVariable idTopico: Long){
 
         service.cadastrar(form)
+    }
+
+    @PostMapping
+    @Transactional
+    fun salvar(@RequestBody @Valid resposta: RespostaForm){
+        service.salvar(resposta)
     }
 
 }

@@ -1,0 +1,1 @@
+alter table resposta drop column status;

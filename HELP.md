@@ -50,6 +50,8 @@ concetar o cmd: mysql -u root -p
 criar banco de dados: create database forum
 vericar bds : SHOW DATABASES
 Abrir o banco: USE NOMEBANCO
+Tabela do flyway :select * from flyway_schema_history
+
 
 iniciar container ja cadastrado: docker start -ai mysql-container
 

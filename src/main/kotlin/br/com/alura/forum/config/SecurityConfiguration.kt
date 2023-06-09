@@ -40,6 +40,7 @@ class SecurityConfiguration(
                 requestMatchers("/swagger-ui/**").permitAll().
                 requestMatchers(HttpMethod.GET,"/v3/api-docs/**").permitAll().
                 requestMatchers("/topicos","/topicos/**").hasAuthority("LEITURA_ESCRITA").
+                requestMatchers("/respostas","/respostas/**").hasAuthority("LEITURA_ESCRITA").
                 anyRequest().
                 authenticated().
                 and()
