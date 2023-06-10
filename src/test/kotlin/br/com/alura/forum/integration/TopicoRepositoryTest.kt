@@ -33,6 +33,7 @@ class TopicoRepositoryTest {
             withDatabaseName("testdb")
             withUsername("joao")
             withPassword("12345")
+            withReuse(true)
         }
         @Container
         private val redisContainer = GenericContainer<Nothing>("redis:latest").apply{
