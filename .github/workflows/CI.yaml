@@ -8,7 +8,7 @@ on:
 jobs:
   in-docker-test:
     name: teste-automatizados
-    run-on: ubuntu-latest
+    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v1
